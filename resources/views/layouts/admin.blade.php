@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') - Admin RS Hewan</title>
+    <title>@yield('title', 'Dashboard') - Admin Rumah Sakit Hewan Universitas Airlangga</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -13,13 +13,14 @@
     <style>
         :root {
             --sidebar-width: 260px;
-            --sidebar-bg: #1E293B;
-            --sidebar-hover: #334155;
-            --primary: #2563EB;
-            --primary-light: #EFF6FF;
+            --sidebar-bg: #113816; /* Hijau tua gelap agar kontras profesional dengan teks putih */
+            --sidebar-hover: #1b5321; /* Hijau medium untuk hover effect */
+            --primary: #199528; /* Warna hijau primary baru */
+            --primary-light: #E8F5E9; /* Warna hijau sangat muda transparan untuk background alert/badge */
+            --secondary: #FFFFFF; /* Warna secondary putih */
         }
 
-        body { font-family: 'Inter', sans-serif; background: #F1F5F9; }
+        body { font-family: 'Inter', sans-serif; background: #F4F6F4; }
 
         /* Sidebar */
         .sidebar {
@@ -37,7 +38,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .sidebar-logo .brand-text {
-            color: white;
+            color: var(--secondary);
             font-weight: 700;
             font-size: 1.1rem;
         }
@@ -52,14 +53,14 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255,255,255,0.4);
         }
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 11px 20px;
-            color: rgba(255,255,255,0.65);
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
@@ -68,13 +69,13 @@
         }
         .sidebar-link:hover {
             background: var(--sidebar-hover);
-            color: white;
-            border-left-color: rgba(255,255,255,0.3);
+            color: var(--secondary);
+            border-left-color: rgba(255,255,255,0.4);
         }
         .sidebar-link.active {
-            background: rgba(37,99,235,0.2);
-            color: #93C5FD;
-            border-left-color: #3B82F6;
+            background: rgba(25, 149, 40, 0.25); /* Transparansi dari warna hijau primary */
+            color: #A3E635; /* Hijau muda cerah agar teks menu aktif sangat jelas terbaca */
+            border-left-color: var(--primary);
         }
         .sidebar-link i { font-size: 1rem; width: 20px; text-align: center; }
 
@@ -86,7 +87,7 @@
 
         /* Topbar */
         .topbar {
-            background: white;
+            background: var(--secondary);
             border-bottom: 1px solid #E2E8F0;
             padding: 12px 24px;
             display: flex;
@@ -112,7 +113,7 @@
 
         /* Stats cards */
         .stat-card {
-            background: white;
+            background: var(--secondary);
             border-radius: 16px;
             padding: 20px;
             border: none;
@@ -137,13 +138,13 @@
 
         /* Tables */
         .table-card {
-            background: white;
+            background: var(--secondary);
             border-radius: 16px;
             box-shadow: 0 1px 8px rgba(0,0,0,0.06);
             overflow: hidden;
         }
         .table-card .card-header {
-            background: white;
+            background: var(--secondary);
             border-bottom: 1px solid #E2E8F0;
             padding: 18px 24px;
         }
@@ -171,10 +172,21 @@
         }
         .form-control:focus, .form-select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            box-shadow: 0 0 0 3px rgba(25, 149, 40, 0.15);
+        }
+
+        /* Buttons modifed to primary green */
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: var(--secondary) !important;
+        }
+        .btn-primary:hover {
+            background-color: #13751f !important;
+            border-color: #13751f !important;
         }
         .btn { border-radius: 10px; font-weight: 600; }
-        .card { border-radius: 16px; border: none; }
+        .card { border-radius: 16px; border: none; background: var(--secondary); }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -188,15 +200,14 @@
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
         <div class="d-flex align-items-center gap-2">
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px;">
-                <i class="bi bi-heart-pulse-fill text-danger fs-5"></i>
+                <i class="bi bi-heart-pulse-fill text-white fs-5"></i>
             </div>
             <div>
-                <div class="brand-text">RS Hewan Online</div>
+                <div class="brand-text">Rumah Sakit Hewan Universitas Airlangga</div>
                 <div class="brand-sub">Panel Administrator</div>
             </div>
         </div>
@@ -218,6 +229,7 @@
         </a>
         <form action="{{ route('admin.logout') }}" method="POST">
             @csrf
+            @method('POST')
             <button type="submit" class="sidebar-link w-100 text-start border-0 bg-transparent" style="cursor:pointer;">
                 <i class="bi bi-box-arrow-right text-danger"></i>
                 <span class="text-danger">Keluar</span>
@@ -226,9 +238,7 @@
     </nav>
 </div>
 
-<!-- Main Content -->
 <div class="main-content">
-    <!-- Topbar -->
     <div class="topbar">
         <div class="d-flex align-items-center gap-3">
             <button class="btn btn-sm btn-outline-secondary d-md-none" onclick="document.getElementById('sidebar').classList.toggle('show')">
@@ -244,7 +254,6 @@
         </div>
     </div>
 
-    <!-- Alerts -->
     <div class="page-content pb-0">
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">

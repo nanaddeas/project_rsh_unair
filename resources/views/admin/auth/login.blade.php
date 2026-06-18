@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - RS Hewan Online</title>
+    <title>Login Admin - Rumah Sakit Hewan Universitas Airlangga</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@
             </div>
 
             <div class="text-center mb-4">
-                <h4 class="fw-bold mb-1">RS Hewan Online</h4>
+                <h4 class="fw-bold mb-1">Rumah Sakit Hewan Universitas Airlangga</h4>
                 <p class="text-muted small">Panel Administrator — Masuk untuk melanjutkan</p>
             </div>
 

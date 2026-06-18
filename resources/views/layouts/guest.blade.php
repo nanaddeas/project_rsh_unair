@@ -18,10 +18,10 @@
 
     <style>
         :root {
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-            --primary-light: #EFF6FF;
-            --secondary: #10B981;
+            --primary: #199528;
+            --primary-dark: #0F5418;
+            --primary-light: #E8F5E9;
+            --secondary: #FFFFFF;
             --accent: #F59E0B;
             --dark: #1E293B;
             --muted: #64748B;
@@ -39,8 +39,8 @@
 
         /* Navbar */
         .navbar-custom {
-            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
-            box-shadow: 0 2px 20px rgba(37,99,235,0.3);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            box-shadow: 0 4px 20px rgba(25,149,40,0.25);
         }
         .navbar-custom .navbar-brand {
             font-weight: 700;
@@ -175,7 +175,7 @@
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, #1E3A8A 0%, #1E293B 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1E293B 100%);
             color: rgba(255,255,255,0.8);
         }
 
@@ -194,9 +194,9 @@
 
 <nav class="navbar navbar-expand-lg navbar-custom py-3">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}">
-            <i class="bi bi-heart-pulse-fill me-2"></i>
-            RS Hewan Online
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+            <img src="{{ asset('images/logo-baru.webp') }}" alt="Logo RSH" height="40" class="me-2">
+            Rumah Sakit Hewan Universitas Airlangga
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
@@ -239,7 +239,7 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <h5 class="text-white fw-bold mb-3">
-                    <i class="bi bi-heart-pulse-fill me-2 text-danger"></i>RS Hewan Online
+                    <i class="bi bi-heart-pulse-fill me-2 text-white"></i>Rumah Sakit Hewan Universitas Airlangga
                 </h5>
                 <p class="small">Booking jadwal rumah sakit hewan yang mudah, cepat, dan terpercaya.</p>
             </div>
@@ -257,7 +257,7 @@
             </div>
         </div>
         <hr class="border-secondary mt-4">
-        <p class="text-center small mb-0">&copy; {{ date('Y') }} RS Hewan Online. Semua hak dilindungi.</p>
+        <p class="text-center small mb-0">&copy; {{ date('Y') }} Rumah Sakit Hewan Universitas Airlangga. Semua hak dilindungi.</p>
     </div>
 </footer>
 
