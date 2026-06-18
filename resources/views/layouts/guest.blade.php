@@ -165,37 +165,6 @@
             text-decoration: line-through;
         }
 
-        /* Service cards */
-        .service-card {
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.25s;
-            background: white;
-            height: 100%;
-        }
-        .service-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(37,99,235,0.15);
-            transform: translateY(-3px);
-        }
-        .service-card.selected {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            box-shadow: 0 8px 25px rgba(37,99,235,0.2);
-        }
-        .service-card .service-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 12px;
-        }
-
         /* Status badges */
         .status-badge {
             padding: 5px 12px;
@@ -235,7 +204,6 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('services') }}">Layanan</a></li>
             </ul>
             <div class="d-flex gap-2">
                 <a href="{{ route('booking.step1') }}" class="btn btn-booking">
@@ -273,7 +241,7 @@
                 <h5 class="text-white fw-bold mb-3">
                     <i class="bi bi-heart-pulse-fill me-2 text-danger"></i>RS Hewan Online
                 </h5>
-                <p class="small">Layanan booking rumah sakit hewan yang mudah, cepat, dan terpercaya untuk sahabat berbulu Anda.</p>
+                <p class="small">Booking jadwal rumah sakit hewan yang mudah, cepat, dan terpercaya.</p>
             </div>
             <div class="col-md-4">
                 <h6 class="text-white fw-semibold mb-3">Jam Operasional</h6>
@@ -284,12 +252,8 @@
                 </ul>
             </div>
             <div class="col-md-4">
-                <h6 class="text-white fw-semibold mb-3">Pembayaran</h6>
-                <p class="small">Pembayaran dilakukan langsung di lokasi setelah pelayanan diberikan.</p>
-                <div class="d-flex gap-2">
-                    <span class="badge bg-success">Cash</span>
-                    <span class="badge bg-primary">QRIS</span>
-                </div>
+                <h6 class="text-white fw-semibold mb-3">Alur Booking</h6>
+                <p class="small">Pilih jadwal, isi data pemilik dan hewan, lalu simpan kode booking Anda.</p>
             </div>
         </div>
         <hr class="border-secondary mt-4">

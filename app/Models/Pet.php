@@ -15,8 +15,10 @@ class Pet extends Model
         'owner_id',
         'name',
         'species',
-        'custom_species',
+        'breed',
+        'gender',
         'age',
+        'fur_color',
     ];
 
     public function owner(): BelongsTo
@@ -31,9 +33,6 @@ class Pet extends Model
 
     public function getDisplaySpeciesAttribute(): string
     {
-        if ($this->species === 'Lainnya' && $this->custom_species) {
-            return $this->custom_species;
-        }
         return $this->species;
     }
 }

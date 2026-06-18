@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Guest\BookingController;
 use App\Http\Controllers\Guest\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -15,19 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/layanan', [HomeController::class, 'services'])->name('services');
 
 // Multi-step booking
 Route::prefix('booking')->name('booking.')->group(function () {
-    Route::get('/langkah-1', [BookingController::class, 'step1'])->name('step1');
+    Route::get('/langkah-1', [BookingController::class, 'step1'])->name('step1'); // Pilih jadwal
+    Route::get('/slots', [BookingController::class, 'getSlots'])->name('slots');
     Route::post('/langkah-1', [BookingController::class, 'storeStep1'])->name('step1.store');
 
-    Route::get('/langkah-2', [BookingController::class, 'step2'])->name('step2');
-    Route::get('/slots', [BookingController::class, 'getSlots'])->name('slots');
+    Route::get('/langkah-2', [BookingController::class, 'step2'])->name('step2'); // Data pemilik & hewan
     Route::post('/langkah-2', [BookingController::class, 'storeStep2'])->name('step2.store');
-
-    Route::get('/langkah-3', [BookingController::class, 'step3'])->name('step3');
-    Route::post('/langkah-3', [BookingController::class, 'storeStep3'])->name('step3.store');
 
     Route::get('/konfirmasi', [BookingController::class, 'confirm'])->name('confirm');
     Route::post('/simpan', [BookingController::class, 'store'])->name('store');
@@ -53,11 +48,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Bookings
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/create', [AdminBookingController::class, 'create'])->name('bookings.create');
+        Route::post('/bookings', [AdminBookingController::class, 'store'])->name('bookings.store');
+        Route::get('/bookings/slots', [AdminBookingController::class, 'getSlots'])->name('bookings.slots');
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
         Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.status');
         Route::delete('/bookings/{booking}', [AdminBookingController::class, 'destroy'])->name('bookings.destroy');
-
-        // Services
-        Route::resource('services', ServiceController::class)->except(['show']);
     });
 });

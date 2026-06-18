@@ -56,6 +56,10 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-3">
+                            <div class="text-muted small">NIK</div>
+                            <div class="fw-bold">{{ $booking->owner->nik }}</div>
+                        </div>
+                        <div class="mb-3">
                             <div class="text-muted small">Nama</div>
                             <div class="fw-bold">{{ $booking->owner->name }}</div>
                         </div>
@@ -87,46 +91,46 @@
                         </div>
                         <div class="mb-3">
                             <div class="text-muted small">Jenis Hewan</div>
-                            <div>{{ $booking->pet->display_species }}</div>
+                            <div>{{ $booking->pet->species }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-muted small">Ras</div>
+                            <div>{{ $booking->pet->breed ?: '-' }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-muted small">Jenis Kelamin</div>
+                            <div>{{ $booking->pet->gender }}</div>
                         </div>
                         @if($booking->pet->age)
-                        <div>
+                        <div class="mb-3">
                             <div class="text-muted small">Usia</div>
                             <div>{{ $booking->pet->age }}</div>
                         </div>
                         @endif
+                        <div>
+                            <div class="text-muted small">Warna Bulu</div>
+                            <div>{{ $booking->pet->fur_color ?: '-' }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Layanan & Catatan -->
+        <!-- Catatan -->
         <div class="card shadow-sm">
             <div class="card-header border-bottom py-3">
                 <h6 class="mb-0 fw-bold">
-                    <i class="bi bi-clipboard-check text-warning me-2"></i>Detail Layanan
+                    <i class="bi bi-clipboard-check text-warning me-2"></i>Catatan Booking
                 </h6>
             </div>
             <div class="card-body p-4">
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div class="text-muted small mb-1">Layanan</div>
-                        <div class="fw-bold fs-5">{{ $booking->service->name }}</div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="text-muted small mb-1">Estimasi Harga</div>
-                        <div class="fw-bold text-success fs-5">{{ $booking->service->estimated_price }}</div>
-                    </div>
-                    @if($booking->notes)
-                    <div class="col-12">
-                        <hr>
-                        <div class="text-muted small mb-1">Catatan Dari Pelanggan</div>
-                        <div class="p-3 bg-light rounded-3 fst-italic">
-                            "{{ $booking->notes }}"
-                        </div>
-                    </div>
-                    @endif
+                @if($booking->notes)
+                <div class="p-3 bg-light rounded-3 fst-italic">
+                    "{{ $booking->notes }}"
                 </div>
+                @else
+                <div class="text-muted">Tidak ada catatan tambahan.</div>
+                @endif
             </div>
         </div>
     </div>

@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('pet_owners', function (Blueprint $table) {
             $table->id();
+            $table->string('nik', 20);
             $table->string('name');
             $table->text('address');
             $table->string('whatsapp', 20);
