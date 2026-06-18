@@ -54,6 +54,9 @@
             Data Booking
             <span class="badge bg-primary ms-2">{{ $bookings->total() }}</span>
         </div>
+        <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle me-1"></i>Booking Manual
+        </a>
     </div>
 
     @if($bookings->isEmpty())
@@ -75,7 +78,6 @@
                     <th>Kode Booking</th>
                     <th>Pemilik</th>
                     <th>Hewan</th>
-                    <th>Layanan</th>
                     <th>Tanggal & Jam</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -90,18 +92,16 @@
                     </td>
                     <td>
                         <div class="fw-semibold small">{{ $booking->owner->name }}</div>
+                        <div class="text-muted" style="font-size:0.72rem;">NIK: {{ $booking->owner->nik }}</div>
                         <div class="text-muted" style="font-size:0.72rem;">
                             <i class="bi bi-whatsapp text-success me-1"></i>{{ $booking->owner->whatsapp }}
                         </div>
                     </td>
                     <td>
                         <div class="fw-semibold small">{{ $booking->pet->name }}</div>
-                        <div class="text-muted" style="font-size:0.72rem;">{{ $booking->pet->display_species }}</div>
-                    </td>
-                    <td>
-                        <span class="badge bg-secondary bg-opacity-10 text-secondary" style="border-radius:8px;">
-                            {{ $booking->service->name }}
-                        </span>
+                        <div class="text-muted" style="font-size:0.72rem;">
+                            {{ $booking->pet->species }} · {{ $booking->pet->gender }}
+                        </div>
                     </td>
                     <td>
                         <div class="small fw-semibold">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</div>

@@ -14,7 +14,6 @@ class Booking extends Model
         'booking_code',
         'owner_id',
         'pet_id',
-        'service_id',
         'booking_date',
         'booking_time',
         'status',
@@ -57,11 +56,6 @@ class Booking extends Model
     public function pet(): BelongsTo
     {
         return $this->belongsTo(Pet::class, 'pet_id');
-    }
-
-    public function service(): BelongsTo
-    {
-        return $this->belongsTo(Service::class, 'service_id');
     }
 
     public function getStatusColorAttribute(): string

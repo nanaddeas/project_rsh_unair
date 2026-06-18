@@ -22,12 +22,12 @@ class DashboardController extends Controller
             'total_all'     => Booking::count(),
         ];
 
-        $recentBookings = Booking::with(['owner', 'pet', 'service'])
+        $recentBookings = Booking::with(['owner', 'pet'])
             ->latest()
             ->take(10)
             ->get();
 
-        $todayBookings = Booking::with(['owner', 'pet', 'service'])
+        $todayBookings = Booking::with(['owner', 'pet'])
             ->where('booking_date', $today)
             ->orderBy('booking_time')
             ->get();

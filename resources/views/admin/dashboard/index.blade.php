@@ -57,7 +57,7 @@
                     </div>
                     <div class="flex-grow-1 min-width-0">
                         <div class="fw-semibold small text-truncate">{{ $b->owner->name }}</div>
-                        <div class="text-muted" style="font-size:0.75rem;">{{ $b->pet->name }} · {{ $b->service->name }}</div>
+                        <div class="text-muted" style="font-size:0.75rem;">{{ $b->pet->name }} - {{ $b->pet->species }}</div>
                     </div>
                     <div class="text-end flex-shrink-0">
                         <div class="fw-bold small">{{ \Carbon\Carbon::createFromTimeString($b->booking_time)->format('H:i') }}</div>
@@ -106,7 +106,7 @@
                             </td>
                             <td>
                                 <div class="fw-semibold small">{{ $booking->owner->name }}</div>
-                                <div class="text-muted" style="font-size:0.75rem;">{{ $booking->pet->name }} · {{ $booking->service->name }}</div>
+                                <div class="text-muted" style="font-size:0.75rem;">{{ $booking->pet->name }} - {{ $booking->pet->species }}</div>
                             </td>
                             <td>
                                 <div class="small">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d/m/Y') }}</div>

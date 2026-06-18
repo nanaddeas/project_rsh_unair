@@ -12,9 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->constrained('pet_owners')->onDelete('cascade');
             $table->string('name');
-            $table->enum('species', ['Kucing', 'Anjing', 'Kelinci', 'Burung', 'Hamster', 'Musang', 'Reptil', 'Lainnya']);
-            $table->string('custom_species')->nullable();
+            $table->string('species', 100);
+            $table->string('breed')->nullable();
+            $table->enum('gender', ['Jantan', 'Betina']);
             $table->string('age')->nullable();
+            $table->string('fur_color')->nullable();
             $table->timestamps();
         });
     }

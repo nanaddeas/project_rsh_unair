@@ -223,10 +223,6 @@
         <a href="{{ route('admin.bookings.index') }}" class="sidebar-link {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-check"></i> Booking
         </a>
-        <a href="{{ route('admin.services.index') }}" class="sidebar-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
-            <i class="bi bi-grid-3x3-gap"></i> Layanan
-        </a>
-
         <div class="sidebar-section-label mt-2">Akun</div>
         <a href="{{ route('home') }}" class="sidebar-link" target="_blank">
             <i class="bi bi-house"></i> Lihat Website

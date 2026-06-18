@@ -11,6 +11,7 @@ class PetOwner extends Model
     use HasFactory;
 
     protected $fillable = [
+        'nik',
         'name',
         'address',
         'whatsapp',

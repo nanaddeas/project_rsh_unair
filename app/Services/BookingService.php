@@ -56,8 +56,7 @@ class BookingService
         $allSlots = self::generateSlots($date);
 
         // Get booked times for this date
-        $bookedQuery = Booking::where('booking_date', $date)
-            ->whereIn('status', ['Menunggu Konfirmasi', 'Dikonfirmasi']);
+        $bookedQuery = Booking::where('booking_date', $date);
 
         if ($excludeBookingId) {
             $bookedQuery->where('id', '!=', $excludeBookingId);
@@ -91,8 +90,7 @@ class BookingService
         }
 
         $query = Booking::where('booking_date', $date)
-            ->where('booking_time', $formattedTime . ':00')
-            ->whereIn('status', ['Menunggu Konfirmasi', 'Dikonfirmasi']);
+            ->where('booking_time', $formattedTime . ':00');
 
         if ($excludeBookingId) {
             $query->where('id', '!=', $excludeBookingId);
