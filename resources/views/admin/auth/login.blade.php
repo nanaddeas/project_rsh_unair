@@ -129,12 +129,6 @@
                 </a>
             </div>
 
-            <!-- Default credentials hint -->
-            <div class="mt-4 p-3 bg-light rounded-3 text-center">
-                <div class="text-muted small">
-                    <i class="bi bi-info-circle me-1"></i>Demo: <strong>admin@rshewan.com</strong> / <strong>admin123</strong>
-                </div>
-            </div>
         </div>
     </div>
 </div>

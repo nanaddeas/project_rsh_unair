@@ -86,7 +86,7 @@
             background: var(--border);
         }
         .step-item.active::after { background: var(--primary); }
-        .step-item.done::after { background: var(--secondary); }
+        .step-item.done::after { background: var(--primary); }
         .step-circle {
             width: 40px;
             height: 40px;
@@ -103,10 +103,10 @@
         .step-item.active .step-circle {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 15px rgba(37,99,235,0.4);
+            box-shadow: 0 4px 15px rgba(25,149,40,0.35);
         }
         .step-item.done .step-circle {
-            background: var(--secondary);
+            background: var(--primary);
             color: white;
         }
         .step-label {
@@ -118,7 +118,7 @@
             white-space: nowrap;
         }
         .step-item.active .step-label { color: var(--primary); font-weight: 600; }
-        .step-item.done .step-label { color: var(--secondary); }
+        .step-item.done .step-label { color: var(--primary); font-weight: 600; }
 
         /* Cards */
         .card { border: none; border-radius: 16px; box-shadow: 0 1px 15px rgba(0,0,0,0.07); }
