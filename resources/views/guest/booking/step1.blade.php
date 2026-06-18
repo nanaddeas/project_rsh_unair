@@ -6,39 +6,36 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <!-- Step Indicator -->
             <div class="step-indicator mb-4 px-3" style="gap: 0;">
                 @php
                 $steps = ['Data Pemilik & Hewan', 'Pilih Jadwal', 'Pilih Layanan', 'Konfirmasi'];
                 @endphp
                 @foreach($steps as $i => $label)
                 <div class="step-item {{ $i === 0 ? 'active' : '' }} flex-fill">
-                    <div class="step-circle">
+                    <div class="step-circle" style="{{ $i === 0 ? 'background-color: #199528; border-color: #199528;' : '' }}">
                         @if($i === 0)
-                            <i class="bi bi-person-fill" style="font-size:1rem;"></i>
+                            <i class="bi bi-person-fill" style="font-size:1rem; color: white;"></i>
                         @else
                             {{ $i + 1 }}
                         @endif
                     </div>
-                    <div class="step-label">{{ $label }}</div>
+                    <div class="step-label" style="{{ $i === 0 ? 'color: #199528; fw-bold' : '' }}">{{ $label }}</div>
                 </div>
                 @endforeach
             </div>
 
-            <!-- Form Card -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white py-3 px-4">
+            <div class="card shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="card-header text-white py-3 px-4" style="background-color: #199528;">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-person-badge me-2"></i>Data Pemilik & Hewan
                     </h5>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-4" style="background-color: #FFFFFF;">
                     <form action="{{ route('booking.step1.store') }}" method="POST" id="step1Form">
                         @csrf
 
-                        <!-- Data Pemilik -->
                         <div class="mb-4">
-                            <h6 class="fw-bold text-primary mb-3">
+                            <h6 class="fw-bold mb-3" style="color: #199528;">
                                 <i class="bi bi-person-circle me-2"></i>Informasi Pemilik
                             </h6>
 
@@ -82,11 +79,10 @@
                             </div>
                         </div>
 
-                        <hr class="my-4">
+                        <hr class="my-4" style="opacity: 0.1;">
 
-                        <!-- Data Hewan -->
                         <div class="mb-4">
-                            <h6 class="fw-bold text-success mb-3">
+                            <h6 class="fw-bold text-success mb-3" style="color: #199528 !important;">
                                 <i class="bi bi-heart-pulse me-2"></i>Informasi Hewan
                             </h6>
 
@@ -110,7 +106,7 @@
                                     <div class="col-6 col-md-3">
                                         <input type="radio" class="btn-check" name="pet_species" id="species_{{ $s['value'] }}"
                                             value="{{ $s['value'] }}" {{ $selected === $s['value'] ? 'checked' : '' }}>
-                                        <label class="btn btn-outline-secondary w-100 py-2" for="species_{{ $s['value'] }}" style="border-radius:12px;">
+                                        <label class="btn btn-outline-success w-100 py-2 custom-radio-btn" for="species_{{ $s['value'] }}" style="border-radius:12px;">
                                             <span class="d-block fs-4 mb-1">{{ $s['icon'] }}</span>
                                             <span class="small fw-semibold">{{ $s['value'] }}</span>
                                         </label>
@@ -122,7 +118,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Custom species (shown when Lainnya selected) -->
                             <div class="mb-3" id="customSpeciesGroup" style="{{ old('pet_species', session('booking_step1.pet_species')) === 'Lainnya' ? '' : 'display:none;' }}">
                                 <label class="form-label fw-semibold">Jenis Hewan Lainnya <span class="text-danger">*</span></label>
                                 <input type="text" name="pet_custom" class="form-control @error('pet_custom') is-invalid @enderror"
@@ -153,10 +148,10 @@
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="{{ route('home') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('home') }}" class="btn btn-outline-secondary px-4 rounded-pill">
                                 <i class="bi bi-arrow-left me-1"></i>Kembali
                             </a>
-                            <button type="submit" class="btn btn-primary px-4">
+                            <button type="submit" class="btn text-white px-4 rounded-pill" style="background-color: #199528;">
                                 Selanjutnya <i class="bi bi-arrow-right ms-1"></i>
                             </button>
                         </div>
@@ -167,6 +162,24 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Styling tambahan untuk radio button jenis hewan agar berwarna hijau saat dipilih */
+    .btn-check:checked + .custom-radio-btn {
+        background-color: #199528 !important;
+        border-color: #199528 !important;
+        color: #FFFFFF !important;
+    }
+    .btn-outline-success {
+        color: #199528;
+        border-color: #199528;
+    }
+    .btn-outline-success:hover {
+        background-color: #199528;
+        border-color: #199528;
+        color: white;
+    }
+</style>
 @endsection
 
 @push('scripts')
