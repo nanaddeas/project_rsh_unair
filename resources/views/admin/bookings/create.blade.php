@@ -55,9 +55,18 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold d-block">Status Klien</label>
+                            <span id="clientStatus" class="badge bg-secondary">Masukkan NIK untuk mengecek</span>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">NIK <span class="text-danger">*</span></label>
-                            <input type="text" name="owner_nik" class="form-control @error('owner_nik') is-invalid @enderror" value="{{ old('owner_nik') }}">
+                            <div class="input-group">
+                                <input type="text" name="owner_nik" id="owner_nik" class="form-control @error('owner_nik') is-invalid @enderror" value="{{ old('owner_nik') }}">
+                                <button type="button" class="btn btn-outline-primary" id="checkNikButton">
+                                    <i class="bi bi-search me-1"></i>Cek NIK
+                                </button>
+                            </div>
                             @error('owner_nik')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
@@ -87,6 +96,31 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold d-block">Status Pasien</label>
+                            <span id="patientStatus" class="badge bg-success">Pasien Baru</span>
+                        </div>
+                        <div class="col-12 d-none" id="existingPetWrapper">
+                            <label class="form-label fw-semibold">Pilih Hewan Terdaftar</label>
+                            <select name="existing_pet_id" id="existing_pet_id" class="form-select">
+                                <option value="">Daftarkan pasien baru</option>
+                            </select>
+                            @error('existing_pet_id')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-12 d-none" id="existingPetSummary">
+                            <div class="alert alert-light border mb-0">
+                                <div class="fw-bold mb-2" id="summaryPetName"></div>
+                                <div class="row g-2 small">
+                                    <div class="col-sm-6"><span class="text-muted">Jenis:</span> <span id="summaryPetSpecies"></span></div>
+                                    <div class="col-sm-6"><span class="text-muted">Ras:</span> <span id="summaryPetBreed"></span></div>
+                                    <div class="col-sm-6"><span class="text-muted">Kelamin:</span> <span id="summaryPetGender"></span></div>
+                                    <div class="col-sm-6"><span class="text-muted">Usia:</span> <span id="summaryPetAge"></span></div>
+                                    <div class="col-sm-6"><span class="text-muted">Warna bulu:</span> <span id="summaryPetFurColor"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                        <div class="row g-3" id="newPetFields">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Nama Hewan <span class="text-danger">*</span></label>
                             <input type="text" name="pet_name" class="form-control @error('pet_name') is-invalid @enderror" value="{{ old('pet_name') }}">
@@ -123,6 +157,8 @@
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Warna Bulu</label>
                             <input type="text" name="pet_fur_color" class="form-control" value="{{ old('pet_fur_color') }}">
+                        </div>
+                        </div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold">Catatan</label>
@@ -173,6 +209,16 @@
 const dateInput = document.getElementById('booking_date');
 const timeInput = document.getElementById('booking_time');
 const slotsContainer = document.getElementById('slotsContainer');
+const manualBookingForm = document.getElementById('manualBookingForm');
+const nikInput = document.getElementById('owner_nik');
+const checkNikButton = document.getElementById('checkNikButton');
+const clientStatus = document.getElementById('clientStatus');
+const patientStatus = document.getElementById('patientStatus');
+const existingPetWrapper = document.getElementById('existingPetWrapper');
+const existingPetSelect = document.getElementById('existing_pet_id');
+const existingPetSummary = document.getElementById('existingPetSummary');
+const newPetFields = document.getElementById('newPetFields');
+let registeredPets = [];
 
 dateInput.addEventListener('change', function() {
     loadAdminSlots(this.value);
@@ -180,6 +226,112 @@ dateInput.addEventListener('change', function() {
 
 if (dateInput.value) {
     loadAdminSlots(dateInput.value);
+}
+
+checkNikButton.addEventListener('click', checkNik);
+nikInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        checkNik();
+    }
+});
+existingPetSelect.addEventListener('change', selectRegisteredPet);
+
+async function checkNik() {
+    const nik = nikInput.value.trim();
+    if (!/^\d{12,20}$/.test(nik)) {
+        clientStatus.className = 'badge bg-danger';
+        clientStatus.textContent = 'NIK harus berisi 12-20 digit';
+        return;
+    }
+
+    checkNikButton.disabled = true;
+    checkNikButton.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mengecek';
+
+    try {
+        const response = await fetch(`{{ route('admin.bookings.owner.lookup') }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': manualBookingForm.querySelector('input[name="_token"]').value,
+            },
+            body: JSON.stringify({ nik }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Gagal mengecek NIK.');
+
+        if (data.found) {
+            clientStatus.className = 'badge bg-primary';
+            clientStatus.textContent = 'Klien Lama';
+            fillOwner(data.owner);
+            showRegisteredPets(data.pets);
+        } else {
+            clientStatus.className = 'badge bg-success';
+            clientStatus.textContent = 'Klien Baru';
+            clearOwnerDetails();
+            showRegisteredPets([]);
+        }
+    } catch (error) {
+        clientStatus.className = 'badge bg-danger';
+        clientStatus.textContent = error.message;
+    } finally {
+        checkNikButton.disabled = false;
+        checkNikButton.innerHTML = '<i class="bi bi-search me-1"></i>Cek NIK';
+    }
+}
+
+function fillOwner(owner) {
+    manualBookingForm.elements.owner_name.value = owner.name || '';
+    manualBookingForm.elements.owner_whatsapp.value = owner.whatsapp || '';
+    manualBookingForm.elements.owner_address.value = owner.address || '';
+}
+
+function clearOwnerDetails() {
+    manualBookingForm.elements.owner_name.value = '';
+    manualBookingForm.elements.owner_whatsapp.value = '';
+    manualBookingForm.elements.owner_address.value = '';
+}
+
+function showRegisteredPets(pets) {
+    registeredPets = pets;
+    existingPetSelect.innerHTML = '<option value="">Daftarkan pasien baru</option>';
+    pets.forEach(pet => existingPetSelect.add(new Option(`${pet.name} - ${pet.species}`, pet.id)));
+    existingPetWrapper.classList.toggle('d-none', pets.length === 0);
+    existingPetSelect.value = '';
+    patientStatus.className = 'badge bg-success';
+    patientStatus.textContent = 'Pasien Baru';
+    existingPetSummary.classList.add('d-none');
+    newPetFields.classList.remove('d-none');
+    clearPetDetails();
+}
+
+function selectRegisteredPet() {
+    const pet = registeredPets.find(item => String(item.id) === existingPetSelect.value);
+    if (!pet) {
+        patientStatus.className = 'badge bg-success';
+        patientStatus.textContent = 'Pasien Baru';
+        existingPetSummary.classList.add('d-none');
+        newPetFields.classList.remove('d-none');
+        clearPetDetails();
+        return;
+    }
+
+    patientStatus.className = 'badge bg-primary';
+    patientStatus.textContent = 'Pasien Lama';
+    newPetFields.classList.add('d-none');
+    existingPetSummary.classList.remove('d-none');
+    document.getElementById('summaryPetName').textContent = pet.name || '-';
+    document.getElementById('summaryPetSpecies').textContent = pet.species || '-';
+    document.getElementById('summaryPetBreed').textContent = pet.breed || '-';
+    document.getElementById('summaryPetGender').textContent = pet.gender || '-';
+    document.getElementById('summaryPetAge').textContent = pet.age || '-';
+    document.getElementById('summaryPetFurColor').textContent = pet.fur_color || '-';
+}
+
+function clearPetDetails() {
+    ['pet_name', 'pet_species', 'pet_breed', 'pet_gender', 'pet_age', 'pet_fur_color']
+        .forEach(name => manualBookingForm.elements[name].value = '');
 }
 
 function loadAdminSlots(date) {

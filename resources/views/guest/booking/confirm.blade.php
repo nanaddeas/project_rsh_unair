@@ -47,6 +47,8 @@
                             <i class="bi bi-person-circle me-2"></i>Data Pemilik
                         </h6>
                         <div class="row g-2">
+                            <div class="col-sm-4 text-muted small">Status Klien</div>
+                            <div class="col-sm-8"><span class="badge bg-primary">Klien {{ $patient['client_type'] }}</span></div>
                             <div class="col-sm-4 text-muted small">NIK</div>
                             <div class="col-sm-8 fw-semibold">{{ $patient['owner_nik'] }}</div>
                             <div class="col-sm-4 text-muted small">Nama Pemilik</div>
@@ -63,6 +65,8 @@
                             <i class="bi bi-heart-pulse me-2"></i>Data Hewan
                         </h6>
                         <div class="row g-2">
+                            <div class="col-sm-4 text-muted small">Status Pasien</div>
+                            <div class="col-sm-8"><span class="badge bg-success">Pasien {{ $patient['patient_type'] }}</span></div>
                             <div class="col-sm-4 text-muted small">Nama Hewan</div>
                             <div class="col-sm-8 fw-semibold">{{ $patient['pet_name'] }}</div>
                             <div class="col-sm-4 text-muted small">Jenis</div>

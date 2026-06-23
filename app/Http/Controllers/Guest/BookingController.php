@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\Pet;
-use App\Models\PetOwner;
 use App\Services\BookingService;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -38,6 +36,15 @@ class BookingController extends Controller
             'date' => $carbon->locale('id')->isoFormat('dddd, D MMMM Y'),
             'is_today' => $carbon->isToday(),
         ]);
+    }
+
+    public function lookupOwner(Request $request)
+    {
+        $validated = $request->validate([
+            'nik' => 'required|digits_between:12,20',
+        ]);
+
+        return response()->json(BookingService::lookupOwnerByNik($validated['nik']));
     }
 
     public function storeStep1(Request $request)
@@ -103,27 +110,14 @@ class BookingController extends Controller
         try {
             DB::beginTransaction();
 
-            $owner = PetOwner::create([
-                'nik' => $patient['owner_nik'],
-                'name' => $patient['owner_name'],
-                'address' => $patient['owner_address'],
-                'whatsapp' => $patient['owner_whatsapp'],
-            ]);
-
-            $pet = Pet::create([
-                'owner_id' => $owner->id,
-                'name' => $patient['pet_name'],
-                'species' => $patient['pet_species'],
-                'breed' => $patient['pet_breed'] ?? null,
-                'gender' => $patient['pet_gender'],
-                'age' => $patient['pet_age'] ?? null,
-                'fur_color' => $patient['pet_fur_color'] ?? null,
-            ]);
+            [$owner, $pet, $clientType, $patientType] = BookingService::resolveOwnerAndPet($patient);
 
             $booking = Booking::create([
                 'booking_code' => Booking::generateCode(),
                 'owner_id' => $owner->id,
                 'pet_id' => $pet->id,
+                'client_type' => $clientType,
+                'patient_type' => $patientType,
                 'booking_date' => $schedule['booking_date'],
                 'booking_time' => $schedule['booking_time'] . ':00',
                 'status' => 'Menunggu Konfirmasi',
@@ -179,15 +173,16 @@ class BookingController extends Controller
 
     private function validatePatient(Request $request): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'owner_nik' => 'required|digits_between:12,20',
             'owner_name' => 'required|string|max:255',
             'owner_whatsapp' => 'required|string|max:20|regex:/^[0-9+\-\s]{8,20}$/',
             'owner_address' => 'required|string|max:1000',
-            'pet_name' => 'required|string|max:255',
-            'pet_species' => 'required|string|max:100',
+            'existing_pet_id' => 'nullable|integer',
+            'pet_name' => 'nullable|required_without:existing_pet_id|string|max:255',
+            'pet_species' => 'nullable|required_without:existing_pet_id|string|max:100',
             'pet_breed' => 'nullable|string|max:100',
-            'pet_gender' => 'required|in:Jantan,Betina',
+            'pet_gender' => 'nullable|required_without:existing_pet_id|in:Jantan,Betina',
             'pet_age' => 'nullable|string|max:50',
             'pet_fur_color' => 'nullable|string|max:100',
         ], [
@@ -202,5 +197,8 @@ class BookingController extends Controller
             'pet_gender.required' => 'Jenis kelamin hewan wajib dipilih.',
             'pet_gender.in' => 'Jenis kelamin hewan tidak valid.',
         ]);
+
+        return BookingService::classifyPatient($validated);
     }
+
 }

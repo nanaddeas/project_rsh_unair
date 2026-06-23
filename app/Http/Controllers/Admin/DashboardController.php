@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Services\BookingService;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        BookingService::markExpiredBookingsAsNoShow();
         $today = Carbon::today()->toDateString();
 
         $stats = [
