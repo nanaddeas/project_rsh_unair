@@ -14,6 +14,8 @@ class Booking extends Model
         'booking_code',
         'owner_id',
         'pet_id',
+        'client_type',
+        'patient_type',
         'booking_date',
         'booking_time',
         'status',
@@ -31,6 +33,8 @@ class Booking extends Model
         'Dibatalkan',
         'Tidak Hadir',
     ];
+
+    const VISIT_TYPES = ['Baru', 'Lama'];
 
     const STATUS_COLORS = [
         'Menunggu Konfirmasi' => 'warning',

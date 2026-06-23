@@ -18,11 +18,11 @@
                             value="{{ request('search') }}">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="form-label small fw-semibold">Filter Tanggal</label>
                     <input type="date" name="date" class="form-control" value="{{ request('date') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="form-label small fw-semibold">Filter Status</label>
                     <select name="status" class="form-select">
                         <option value="">-- Semua Status --</option>
@@ -33,7 +33,25 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2 d-flex gap-2">
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold">Status Klien</label>
+                    <select name="client_type" class="form-select">
+                        <option value="">Semua</option>
+                        @foreach(\App\Models\Booking::VISIT_TYPES as $type)
+                        <option value="{{ $type }}" {{ request('client_type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-semibold">Status Pasien</label>
+                    <select name="patient_type" class="form-select">
+                        <option value="">Semua</option>
+                        @foreach(\App\Models\Booking::VISIT_TYPES as $type)
+                        <option value="{{ $type }}" {{ request('patient_type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary flex-fill">
                         <i class="bi bi-funnel me-1"></i>Filter
                     </button>
@@ -54,16 +72,21 @@
             Data Booking
             <span class="badge bg-primary ms-2">{{ $bookings->total() }}</span>
         </div>
-        <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle me-1"></i>Booking Manual
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.bookings.export', request()->only(['search', 'date', 'status', 'client_type', 'patient_type'])) }}" class="btn btn-success btn-sm">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i>Export Excel
+            </a>
+            <a href="{{ route('admin.bookings.create') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i>Booking Manual
+            </a>
+        </div>
     </div>
 
     @if($bookings->isEmpty())
     <div class="text-center py-5 text-muted">
         <i class="bi bi-inbox fs-1 d-block mb-3 opacity-50"></i>
         <p class="mb-0">Tidak ada data booking ditemukan</p>
-        @if(request()->hasAny(['search', 'status', 'date']))
+        @if(request()->hasAny(['search', 'status', 'date', 'client_type', 'patient_type']))
         <a href="{{ route('admin.bookings.index') }}" class="btn btn-sm btn-outline-primary mt-3">
             <i class="bi bi-arrow-counterclockwise me-1"></i>Reset Filter
         </a>
@@ -92,6 +115,7 @@
                     </td>
                     <td>
                         <div class="fw-semibold small">{{ $booking->owner->name }}</div>
+                        <span class="badge bg-primary-subtle text-primary mb-1">Klien {{ $booking->client_type }}</span>
                         <div class="text-muted" style="font-size:0.72rem;">NIK: {{ $booking->owner->nik }}</div>
                         <div class="text-muted" style="font-size:0.72rem;">
                             <i class="bi bi-whatsapp text-success me-1"></i>{{ $booking->owner->whatsapp }}
@@ -99,6 +123,7 @@
                     </td>
                     <td>
                         <div class="fw-semibold small">{{ $booking->pet->name }}</div>
+                        <span class="badge bg-success-subtle text-success mb-1">Pasien {{ $booking->patient_type }}</span>
                         <div class="text-muted" style="font-size:0.72rem;">
                             {{ $booking->pet->species }} · {{ $booking->pet->gender }}
                         </div>

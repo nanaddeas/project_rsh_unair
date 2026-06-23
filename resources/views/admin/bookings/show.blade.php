@@ -56,6 +56,10 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-3">
+                            <div class="text-muted small">Status Klien</div>
+                            <span class="badge bg-primary">Klien {{ $booking->client_type }}</span>
+                        </div>
+                        <div class="mb-3">
                             <div class="text-muted small">NIK</div>
                             <div class="fw-bold">{{ $booking->owner->nik }}</div>
                         </div>
@@ -85,6 +89,10 @@
                         </h6>
                     </div>
                     <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="text-muted small">Status Pasien</div>
+                            <span class="badge bg-success">Pasien {{ $booking->patient_type }}</span>
+                        </div>
                         <div class="mb-3">
                             <div class="text-muted small">Nama Hewan</div>
                             <div class="fw-bold">{{ $booking->pet->name }}</div>

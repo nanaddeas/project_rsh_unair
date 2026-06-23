@@ -19,6 +19,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::prefix('booking')->name('booking.')->group(function () {
     Route::get('/langkah-1', [BookingController::class, 'step1'])->name('step1'); // Pilih jadwal
     Route::get('/slots', [BookingController::class, 'getSlots'])->name('slots');
+    Route::post('/cek-klien', [BookingController::class, 'lookupOwner'])
+        ->middleware('throttle:20,1')
+        ->name('owner.lookup');
     Route::post('/langkah-1', [BookingController::class, 'storeStep1'])->name('step1.store');
 
     Route::get('/langkah-2', [BookingController::class, 'step2'])->name('step2'); // Data pemilik & hewan
@@ -48,9 +51,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Bookings
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/export', [AdminBookingController::class, 'export'])->name('bookings.export');
         Route::get('/bookings/create', [AdminBookingController::class, 'create'])->name('bookings.create');
         Route::post('/bookings', [AdminBookingController::class, 'store'])->name('bookings.store');
         Route::get('/bookings/slots', [AdminBookingController::class, 'getSlots'])->name('bookings.slots');
+        Route::post('/bookings/cek-klien', [AdminBookingController::class, 'lookupOwner'])
+            ->middleware('throttle:60,1')
+            ->name('bookings.owner.lookup');
         Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
         Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.status');
         Route::delete('/bookings/{booking}', [AdminBookingController::class, 'destroy'])->name('bookings.destroy');
